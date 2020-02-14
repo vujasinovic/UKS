@@ -6,4 +6,5 @@ settings.py
 
 .idea/
 
+*.sqlite3
 db.sqllite3
