@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Project(models.Model):
-    project_name = models.CharField()
+    project_name = models.CharField(max_length=200)
     git_repository_url = models.URLField()
 
 
@@ -16,52 +16,52 @@ class Milestone(models.Model):
 
 class Issue(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    milestones = models.ForeignKey(Milestone)
+    milestones = models.ForeignKey(Milestone, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
     approximated_time = models.TimeField()
     invested_time = models.TimeField()
     completion = models.IntegerField()
-    issue_name = models.CharField()
-    description = models.CharField()
+    issue_name = models.CharField(max_length=100)
+    description = models.CharField(max_length=500)
 
 
 class Label(models.Model):
     issues = models.ManyToManyField(Issue)
-    label_name = models.CharField()
-    label_color = models.CharField()
+    label_name = models.CharField(max_length=20)
+    label_color = models.CharField(max_length=20)
 
 
 class User(models.Model):
     issues = models.ManyToManyField(Issue)
-    name = models.CharField()
+    name = models.CharField(max_length=50)
     email = models.EmailField()
-    projects = models.ForeignKey(Project)
+    projects = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True)
 
 
 class GithubUser(models.Model):
     users = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    username = models.CharField()
+    username = models.CharField(max_length=30)
 
 
 class Commit(models.Model):
     projects = models.ForeignKey(Project, on_delete=models.CASCADE)
     url = models.URLField
-    comment = models.CharField()
+    comment = models.CharField(max_length=200)
     invested_time = models.TimeField()
 
 
 class Event(models.Model):
     issues = models.ForeignKey(Issue, on_delete=models.CASCADE)
     time = models.TimeField()
-    users = models.ForeignKey(User)
+    users = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         abstract = True
 
 
 class ChangingComment(Event):
-    comment = models.CharField()
+    comment = models.CharField(max_length=400)
 
 
 class ChangingState(Event):
@@ -73,9 +73,9 @@ class ChangingAssignee(Event):
 
 
 class Comment(Event):
-    description = models.CharField()
+    description = models.CharField(max_length=400)
 
 
 class ChangingMilestone(Event):
-    milestones = models.ForeignKey(Milestone)
+    milestones = models.ForeignKey(Milestone, on_delete=models.SET_NULL, null=True)
 
