@@ -1,0 +1,7 @@
+settings.py
+
+*.log
+*.pot
+*.pyc
+
+.idea/
