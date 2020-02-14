@@ -5,3 +5,5 @@ settings.py
 *.pyc
 
 .idea/
+
+db.sqllite3
