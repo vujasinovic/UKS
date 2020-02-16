@@ -3,9 +3,15 @@ from django.db import models
 # Create your models here.
 
 
+class User(models.Model):
+    username = models.CharField(max_length=50)
+    email = models.EmailField()
+
+
 class Project(models.Model):
     project_name = models.CharField(max_length=200)
     git_repository_url = models.URLField()
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
 
 class Milestone(models.Model):
@@ -24,19 +30,13 @@ class Issue(models.Model):
     completion = models.IntegerField()
     issue_name = models.CharField(max_length=100)
     description = models.CharField(max_length=500)
+    users = models.ManyToManyField(User)
 
 
 class Label(models.Model):
     issues = models.ManyToManyField(Issue)
     label_name = models.CharField(max_length=20)
     label_color = models.CharField(max_length=20)
-
-
-class User(models.Model):
-    issues = models.ManyToManyField(Issue)
-    name = models.CharField(max_length=50)
-    email = models.EmailField()
-    projects = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True)
 
 
 class GithubUser(models.Model):
