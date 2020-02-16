@@ -1,0 +1,26 @@
+<h1>Projects</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Git repository url</th>
+        <th>View</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for project in object_list %}
+        <tr>
+            <td>{{ project.project_name }}</td>
+            <td>{{ project.git_repository_url }}</td>
+            <td><a href="{% url "project_view" project.id %}">view</a></td>
+            <td><a href="{% url "project_edit" project.id %}">edit</a></td>
+            <td><a href="{% url "project_delete" project.id %}">delete</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url "project_new" %}">New</a>
