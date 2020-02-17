@@ -1,0 +1,31 @@
+<h2>Milestones</h2>
+
+<table border="1" style="border: solid">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Start date</th>
+        <th>End date</th>
+        <th>Project</th>
+        <th>View</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for milestone in object_list %}
+        <tr>
+            <td>{{ milestone.name }}</td>
+            <td>{{ milestone.start_date }}</td>
+            <td>{{ milestone.end_date }}</td>
+            <td>{{ milestone.projects.project_name }}</td>
+            <td><a href="{% url "milestone_view" milestone.id %}">view</a></td>
+            <td><a href="{% url "milestone_edit" milestone.id %}">edit</a></td>
+            <td><a href="{% url "milestone_delete" milestone.id %}">delete</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<hr>
+<a href="{% url "milestone_new" %}">Create new</a>

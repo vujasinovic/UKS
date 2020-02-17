@@ -1,0 +1,5 @@
+<h2>Issue delete</h2>
+<form method="post">{% csrf_token %}
+    Are you sure you want to delete issue: "{{ object }}" ?
+    <input type="submit" value="Submit" />
+</form>

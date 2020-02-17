@@ -1,0 +1,5 @@
+<h2>Project Delete</h2>
+<form method="post">{% csrf_token %}
+    Are you sure you want to delete project: "{{ object.project_name }}" ?
+    <input type="submit" value="Submit" />
+</form>
