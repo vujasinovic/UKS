@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'projects.apps.ProjectsConfig',
     'milestones.apps.MilestonesConfig',
+    'issues.apps.IssuesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
