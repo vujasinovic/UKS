@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'uxhub.apps.UxhubConfig',
     'accounts.apps.AccountsConfig',
     'projects.apps.ProjectsConfig',
+    'milestones.apps.MilestonesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

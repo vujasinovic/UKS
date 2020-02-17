@@ -13,11 +13,18 @@ class Project(models.Model):
     git_repository_url = models.URLField()
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
+    def __str__(self):
+        return self.project_name
+
 
 class Milestone(models.Model):
+    name = models.CharField(max_length=200, default='')
     projects = models.ForeignKey(Project, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
+
+    def __str__(self):
+        return self.name
 
 
 class Issue(models.Model):

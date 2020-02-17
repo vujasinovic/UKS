@@ -1,0 +1,5 @@
+<h2>Milestone Delete</h2>
+<form method="post">{% csrf_token %}
+    Are you sure you want to delete milestone: "{{ object }}" ?
+    <input type="submit" value="Submit" />
+</form>
