@@ -7,6 +7,9 @@ class User(models.Model):
     username = models.CharField(max_length=50)
     email = models.EmailField()
 
+    def __str__(self):
+        return self.username
+
 
 class Project(models.Model):
     project_name = models.CharField(max_length=200)
@@ -28,16 +31,19 @@ class Milestone(models.Model):
 
 
 class Issue(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=500)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     milestones = models.ForeignKey(Milestone, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
-    approximated_time = models.TimeField()
-    invested_time = models.TimeField()
-    completion = models.IntegerField()
-    issue_name = models.CharField(max_length=100)
-    description = models.CharField(max_length=500)
-    users = models.ManyToManyField(User)
+    approximated_time = models.IntegerField()
+    invested_time = models.IntegerField()
+    completion = models.BooleanField()
+    users = models.ManyToManyField(User, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Label(models.Model):

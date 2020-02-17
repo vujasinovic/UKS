@@ -1,0 +1,12 @@
+<h2>Issue details</h2>
+<h3>Name: {{ object.name }}</h3>
+<h3>Description: {{ object.description }}</h3>
+<h3>Start date: {{ object.start_date }}</h3>
+<h3>End date: {{ object.end_date }}</h3>
+<h3>Milestone: {{ object.milestones }}</h3>
+<h3>Approximated time: {{ object.approximated_time }}</h3>
+<h3>Invested time: {{ object.invested_time }}</h3>
+<h3>Completion: {{ object.completion }}</h3>
+<h3>User: {{ object.users }}</h3>
+<h3>Project: {{ object.project }} (<a
+        href="{{ object.project.git_repository_url }}"> {{ object.project.git_repository_url }}</a>)</h3>

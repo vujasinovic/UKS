@@ -1,0 +1,43 @@
+<h2>Issues</h2>
+
+<table border="1" style="border: solid">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Project</th>
+        <th>Milestone</th>
+        <th>Approximated time</th>
+        <th>Invested time</th>
+        <th>Start date</th>
+        <th>End date</th>
+        <th>Completion</th>
+        <th>Users</th>
+        <th>View</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for issue in object_list %}
+        <tr>
+            <td>{{ issue.name }}</td>
+            <td>{{ issue.description }}</td>
+            <td>{{ issue.project }}</td>
+            <td>{{ issue.milestones }}</td>
+            <td>{{ issue.approximated_time }}</td>
+            <td>{{ issue.invested_time }}</td>
+            <td>{{ issue.start_date }}</td>
+            <td>{{ issue.end_date }}</td>
+            <td>{{ issue.completion }}</td>
+            <td>{{ issue.users }}</td>
+            <td><a href="{% url "issue_view" issue.id %}">view</a></td>
+            <td><a href="{% url "issue_edit" issue.id %}">edit</a></td>
+            <td><a href="{% url "issue_delete" issue.id %}">delete</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<hr>
+<a href="{% url "issue_new" %}">Create new</a>
