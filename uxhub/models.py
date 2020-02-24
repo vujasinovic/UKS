@@ -6,7 +6,7 @@ from django.contrib.auth.models import User as AuthUser
 class User(models.Model):
     username = models.CharField(max_length=50)
     email = models.EmailField()
-    users = models.OneToOneField(AuthUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(AuthUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.username
@@ -16,7 +16,7 @@ class Project(models.Model):
     project_name = models.CharField(max_length=200)
     git_repository_url = models.URLField()
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    # users = models.ManyToManyField(User)
+    users = models.ManyToManyField(User, related_name='contributors')
 
     def __str__(self):
         return self.project_name
@@ -42,7 +42,7 @@ class Issue(models.Model):
     approximated_time = models.IntegerField()
     invested_time = models.IntegerField()
     completion = models.BooleanField()
-    users = models.ManyToManyField(User, null=True)
+    users = models.ManyToManyField(User)
 
     def __str__(self):
         return self.name
