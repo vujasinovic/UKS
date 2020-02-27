@@ -13,10 +13,10 @@ class User(models.Model):
 
 
 class Project(models.Model):
-    project_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
     git_repository_url = models.URLField()
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    users = models.ManyToManyField(User, related_name='contributors')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    collaborators = models.ManyToManyField(User, related_name='collaborators')
 
     def __str__(self):
         return self.project_name
@@ -42,7 +42,7 @@ class Issue(models.Model):
     approximated_time = models.IntegerField()
     invested_time = models.IntegerField()
     completion = models.BooleanField()
-    users = models.ManyToManyField(User)
+    assignee = models.ManyToManyField(User)
 
     def __str__(self):
         return self.name
@@ -50,8 +50,8 @@ class Issue(models.Model):
 
 class Label(models.Model):
     issues = models.ManyToManyField(Issue)
-    label_name = models.CharField(max_length=20)
-    label_color = models.CharField(max_length=20)
+    name = models.CharField(max_length=20)
+    color = models.CharField(max_length=20)
 
 
 class GithubUser(models.Model):
@@ -62,7 +62,7 @@ class GithubUser(models.Model):
 class Commit(models.Model):
     projects = models.ForeignKey(Project, on_delete=models.CASCADE)
     issues = models.ForeignKey(Issue, on_delete=models.CASCADE, blank=True, null=True)
-    users = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     url = models.URLField
     comment = models.CharField(max_length=200)
     invested_time = models.TimeField()
@@ -71,7 +71,7 @@ class Commit(models.Model):
 class Event(models.Model):
     issues = models.ForeignKey(Issue, on_delete=models.CASCADE)
     time = models.TimeField()
-    users = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         abstract = True
