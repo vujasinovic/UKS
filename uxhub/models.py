@@ -6,7 +6,7 @@ from django.contrib.auth.models import User as AuthUser
 class User(models.Model):
     username = models.CharField(max_length=50)
     email = models.EmailField()
-    user = models.OneToOneField(AuthUser, on_delete=models.CASCADE)
+    auth_user = models.OneToOneField(AuthUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.username
