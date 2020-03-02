@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User as AuthUser
 # Create your models here.
 from django.utils.timezone import now
 
@@ -9,15 +9,17 @@ from events.event_handling import create_comment_event, create_milestone_event, 
 class User(models.Model):
     username = models.CharField(max_length=50)
     email = models.EmailField()
+    auth_user = models.OneToOneField(AuthUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.username
 
 
 class Project(models.Model):
-    project_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
     git_repository_url = models.URLField()
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    collaborators = models.ManyToManyField(User, related_name='collaborators')
 
     def __str__(self):
         return self.project_name
@@ -55,8 +57,7 @@ class Issue(models.Model):
     approximated_time = models.IntegerField()
     invested_time = models.IntegerField()
     completion = models.BooleanField()
-    users = models.ManyToManyField(User, null=True)
-    state = models.CharField(max_length=8, choices=ISSUE_STATUS, default='TO_DO')
+    assignee = models.ManyToManyField(User)
 
     def __str__(self):
         return self.name
@@ -68,8 +69,8 @@ class Issue(models.Model):
 
 class Label(models.Model):
     issues = models.ManyToManyField(Issue)
-    label_name = models.CharField(max_length=20)
-    label_color = models.CharField(max_length=20)
+    name = models.CharField(max_length=20)
+    color = models.CharField(max_length=20)
 
 
 class GithubUser(models.Model):
@@ -79,15 +80,17 @@ class GithubUser(models.Model):
 
 class Commit(models.Model):
     projects = models.ForeignKey(Project, on_delete=models.CASCADE)
+    issues = models.ForeignKey(Issue, on_delete=models.CASCADE, blank=True, null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     url = models.URLField
     comment = models.CharField(max_length=200)
     invested_time = models.TimeField()
 
 
 class Event(models.Model):
-    issues = models.ForeignKey(Issue, on_delete=models.SET_NULL, null=True)
-    time = models.DateTimeField(default=now, blank=True)
-    users = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    issues = models.ForeignKey(Issue, on_delete=models.CASCADE)
+    time = models.TimeField()
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         abstract = True
