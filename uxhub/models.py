@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User as AuthUser
 # Create your models here.
+from django.utils.timezone import now
+
+from events.event_handling import create_comment_event, create_milestone_event, create_issue_event
 
 
 class User(models.Model):
@@ -31,6 +34,18 @@ class Milestone(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super().save(force_insert, force_update, using, update_fields)
+        create_milestone_event(self.pk)
+
+
+ISSUE_STATUS = (
+        ('TO_DO', 'To do'),
+        ('OPENED', 'Opened'),
+        ('FEEDBACK', 'Requested feedback'),
+        ('CLOSED', 'Closed')
+)
+
 
 class Issue(models.Model):
     name = models.CharField(max_length=100)
@@ -46,6 +61,10 @@ class Issue(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super().save(force_insert, force_update, using, update_fields)
+        create_issue_event(self.pk)
 
 
 class Label(models.Model):
@@ -77,22 +96,28 @@ class Event(models.Model):
         abstract = True
 
 
-class ChangingComment(Event):
-    comment = models.CharField(max_length=400)
-
-
-class ChangingState(Event):
-    new_state = models.enums
-
-
-class ChangingAssignee(Event):
-    assignee = User()
+class ChangingIssue(Event):
+    new_state = models.CharField(max_length=8, choices=ISSUE_STATUS, default='TO_DO')
+    assignees = models.ManyToManyField(User, related_name='issue_assignees')
 
 
 class Comment(Event):
     description = models.CharField(max_length=400)
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super().save(force_insert, force_update, using, update_fields)
+        create_comment_event(self.pk)
+
+
+class ChangingComment(Event):
+    description = models.CharField(max_length=400)
+    comment = models.ForeignKey(Comment, on_delete=models.SET_NULL, null=True)
+
 
 class ChangingMilestone(Event):
     milestones = models.ForeignKey(Milestone, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=200, default='')
+    projects = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
+    start_date = models.DateField(default=now)
+    end_date = models.DateField(default=now)
 

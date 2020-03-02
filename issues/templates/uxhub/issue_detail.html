@@ -10,3 +10,4 @@
 <h3>User: {{ object.users }}</h3>
 <h3>Project: {{ object.project }} (<a
         href="{{ object.project.git_repository_url }}"> {{ object.project.git_repository_url }}</a>)</h3>
+<h3><button><a href="{% url 'events:issue_log' object.pk %}">Display logs for this issue</a></button></p></h3>
