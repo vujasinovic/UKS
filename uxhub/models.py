@@ -22,7 +22,7 @@ class Project(models.Model):
     collaborators = models.ManyToManyField(User, related_name='collaborators')
 
     def __str__(self):
-        return self.project_name
+        return self.name
 
 
 class Milestone(models.Model):
@@ -58,6 +58,7 @@ class Issue(models.Model):
     invested_time = models.IntegerField()
     completion = models.BooleanField()
     assignee = models.ManyToManyField(User)
+    state = models.CharField(max_length=8, choices=ISSUE_STATUS, default='TO_DO')
 
     def __str__(self):
         return self.name
@@ -88,8 +89,8 @@ class Commit(models.Model):
 
 
 class Event(models.Model):
-    issues = models.ForeignKey(Issue, on_delete=models.CASCADE)
-    time = models.TimeField()
+    issues = models.ForeignKey(Issue, on_delete=models.SET_NULL, null=True)
+    time = models.DateTimeField(default=now, blank=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     class Meta:
@@ -120,4 +121,3 @@ class ChangingMilestone(Event):
     projects = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
     start_date = models.DateField(default=now)
     end_date = models.DateField(default=now)
-

@@ -3,7 +3,7 @@ def create_comment_event(pk):
 
     comment = Comment.objects.get(pk=pk)
     comment_event = ChangingComment(description=comment.description, issues=comment.issues,
-                                    users=comment.users, comment=comment)
+                                    author=comment.author, comment=comment)
     comment_event.save()
 
 
@@ -22,4 +22,4 @@ def create_issue_event(pk):
     issue = Issue.objects.get(pk=pk)
     issue_event = ChangingIssue(issues=issue, new_state=issue.state)
     issue_event.save()
-    issue_event.assignees.set(issue.users.all())
+    issue_event.assignees.set(issue.assignee.all())
