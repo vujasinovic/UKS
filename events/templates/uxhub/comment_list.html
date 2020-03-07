@@ -15,7 +15,7 @@
     {% for comment in object_list %}
         <tr>
             <td>{{ comment.issues }}</td>
-            <td>{{ comment.users }}</td>
+            <td>{{ comment.author }}</td>
             <td>{{ comment.time }}</td>
             <td>{{ comment.description }}</td>
             <td><a href="{% url "events:comment_detail" comment.id %}">View</a></td>
