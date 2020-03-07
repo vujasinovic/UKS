@@ -17,13 +17,13 @@ class ProjectView(DetailView):
 
 class ProjectCreate(CreateView):
     model = Project
-    fields = ['project_name', 'git_repository_url']
+    fields = ['name', 'git_repository_url']
     success_url = reverse_lazy('project_list')
 
 
 class ProjectUpdate(UpdateView):
     model = Project
-    fields = ['project_name', 'git_repository_url']
+    fields = ['name', 'git_repository_url']
     success_url = reverse_lazy('project_list')
 
 

@@ -15,14 +15,14 @@ class IssueView(DetailView):
 class IssueCreate(CreateView):
     model = Issue
     fields = ['name', 'description', 'project', 'milestones', 'start_date', 'end_date', 'approximated_time',
-              'invested_time', 'completion', 'state']
+              'invested_time', 'completion', 'state', 'assignee']
     success_url = reverse_lazy('issue_list')
 
 
 class IssueUpdate(UpdateView):
     model = Issue
     fields = ['name', 'description', 'project', 'milestones', 'start_date', 'end_date', 'approximated_time',
-              'invested_time', 'completion', 'state']
+              'invested_time', 'completion', 'state', 'assignee']
     success_url = reverse_lazy('issue_list')
 
 

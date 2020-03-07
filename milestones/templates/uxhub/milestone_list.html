@@ -18,7 +18,7 @@
             <td>{{ milestone.name }}</td>
             <td>{{ milestone.start_date }}</td>
             <td>{{ milestone.end_date }}</td>
-            <td>{{ milestone.projects.project_name }}</td>
+            <td>{{ milestone.projects.name }}</td>
             <td><a href="{% url "milestone_view" milestone.id %}">view</a></td>
             <td><a href="{% url "milestone_edit" milestone.id %}">edit</a></td>
             <td><a href="{% url "milestone_delete" milestone.id %}">delete</a></td>

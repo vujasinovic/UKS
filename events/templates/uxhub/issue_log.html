@@ -10,7 +10,9 @@
         <h3>Approximated time: {{ object.approximated_time }}</h3>
         <h3>Invested time: {{ object.invested_time }}</h3>
         <h3>Completion: {{ object.completion }}</h3>
-        <h3>User: {{ object.users }}</h3>
+        <h3>Assignee: {% for a in object.assignee.all %}
+                        {{ a.username }}
+                      {% endfor %}  </h3>
         <h3>Project: {{ object.project }} (<a
             href="{{ object.project.git_repository_url }}"> {{ object.project.git_repository_url }}</a>)</h3>
         <p><button><a href="{% url "issue_view" object.id %}">Back</button></p>
@@ -60,8 +62,8 @@
         <div class="{% cycle 'container left' 'container right' %}">
             <div class="content">
             <h2>{{ comment_event.time | date:"d.M.Y. H:i:s" }},
-                {% if comment_event.users %}
-                    user: {{comment_event.users.username}}
+                {% if comment_event.author %}
+                    user: {{comment_event.author.username}}
                 {% else %}
                     UNKNOWN_USER
                 {% endif %}
