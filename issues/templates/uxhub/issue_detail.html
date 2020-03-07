@@ -7,7 +7,12 @@
 <h3>Approximated time: {{ object.approximated_time }}</h3>
 <h3>Invested time: {{ object.invested_time }}</h3>
 <h3>Completion: {{ object.completion }}</h3>
-<h3>User: {{ object.assignee }}</h3>
+<h3>User:
+    {% for a in object.assignee.all %}
+    {{ a.username }}
+    {% endfor %}
+</h3>
+
 <h3>Project: {{ object.project }} (<a
         href="{{ object.project.git_repository_url }}"> {{ object.project.git_repository_url }}</a>)</h3>
 <h3><button><a href="{% url 'events:issue_log' object.pk %}">Display logs for this issue</a></button></p></h3>
