@@ -1,5 +1,11 @@
-<h2>Project Edit</h2>
+{% extends 'base.html' %}
+
+{%block content %}
+
+<h2>Project New</h2>
 <form method="post">{% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Submit" />
+    <input type="submit" value="Submit" class="btn btn-success" />
 </form>
+
+{% endblock %}

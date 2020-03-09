@@ -1,3 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
 <h2>Milestone Details</h2>
 <h3>Name: {{ object.name }}</h3>
 <h3>Project: {{ object.projects.name }} (<a
@@ -5,3 +10,5 @@
 <h3>Start date: {{ object.start_date }}</h3>
 <h3>End date: {{ object.end_date }}</h3>
 <h3><button><a href="{% url 'events:milestone_log' object.pk %}">Display logs for this milestone</a></button></p></h3>
+
+{% endblock %}
