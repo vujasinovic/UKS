@@ -1,6 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}UXHUB - Milestones{% endblock %}
+
+{% block content %}
+
 <h2>Milestones</h2>
 
-<table border="1" style="border: solid">
+<table border="1" style="border: solid" class="table table-hover">
     <thead>
     <tr>
         <th>Name</th>
@@ -19,13 +25,15 @@
             <td>{{ milestone.start_date }}</td>
             <td>{{ milestone.end_date }}</td>
             <td>{{ milestone.projects.name }}</td>
-            <td><a href="{% url "milestone_view" milestone.id %}">view</a></td>
-            <td><a href="{% url "milestone_edit" milestone.id %}">edit</a></td>
-            <td><a href="{% url "milestone_delete" milestone.id %}">delete</a></td>
+            <td><a href="{% url "milestone_view" milestone.id %}" class="btn btn-info">view</a></td>
+            <td><a href="{% url "milestone_edit" milestone.id %}" class="btn btn-info">edit</a></td>
+            <td><a href="{% url "milestone_delete" milestone.id %}" class="btn btn-danger">delete</a></td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
 
 <hr>
-<a href="{% url "milestone_new" %}">Create new</a>
+<a href="{% url "milestone_new" %}" class="btn btn-success"> + New Milestone</a>
+
+{% endblock %}

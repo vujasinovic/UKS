@@ -1,6 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}UXHUB - Issues {% endblock %}
+
+{% block content %}
+
 <h2>Issues</h2>
 
-<table border="1" style="border: solid">
+<table border="1" style="border: solid" class="table table-hover">
     <thead>
     <tr>
         <th>Name</th>
@@ -33,13 +39,15 @@
             {% for a in issue.assignee.all %}
             <td>{{ a.username }} </td>
             {% endfor %}
-            <td><a href="{% url "issue_view" issue.id %}">view</a></td>
-            <td><a href="{% url "issue_edit" issue.id %}">edit</a></td>
-            <td><a href="{% url "issue_delete" issue.id %}">delete</a></td>
+            <td><a href="{% url "issue_view" issue.id %}" class="btn btn-info">view</a></td>
+            <td><a href="{% url "issue_edit" issue.id %}" class="btn btn-info">edit</a></td>
+            <td><a href="{% url "issue_delete" issue.id %}" class="btn btn-danger">delete</a></td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
 
 <hr>
-<a href="{% url "issue_new" %}">Create new</a>
+<a href="{% url "issue_new" %}" class="btn btn-success"> + New issue</a>
+
+{% endblock %}

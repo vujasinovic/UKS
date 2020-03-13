@@ -1,3 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
 <h2>Issue details</h2>
 <h3>Name: {{ object.name }}</h3>
 <h3>Description: {{ object.description }}</h3>
@@ -8,7 +13,7 @@
 <h3>Invested time: {{ object.invested_time }}</h3>
 <h3>Completion: {{ object.completion }}</h3>
 <h3>Assignee:
-     <table border="1">
+     <table border="1" class="table">
                 <tr>
                     <th>Username</th>
                     <th>Email</th>
@@ -23,4 +28,6 @@
 
 <h3>Project: {{ object.project }} (<a
         href="{{ object.project.git_repository_url }}"> {{ object.project.git_repository_url }}</a>)</h3>
-<h3><button><a href="{% url 'events:issue_log' object.pk %}">Display logs for this issue</a></button></p></h3>
+<h3><button class="btn btn-default"><a href="{% url 'events:issue_log' object.pk %}">Display logs for this issue</a></button></p></h3>
+
+{% endblock %}
