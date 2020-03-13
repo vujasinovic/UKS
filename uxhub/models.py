@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import User as AuthUser
+from django.db import models
 # Create your models here.
 from django.utils.timezone import now
 
@@ -40,10 +40,8 @@ class Milestone(models.Model):
 
 
 ISSUE_STATUS = (
-        ('TO_DO', 'To do'),
-        ('OPENED', 'Opened'),
-        ('FEEDBACK', 'Requested feedback'),
-        ('CLOSED', 'Closed')
+    ('OPEN', 'Open'),
+    ('CLOSED', 'Closed'),
 )
 
 
@@ -57,8 +55,8 @@ class Issue(models.Model):
     approximated_time = models.IntegerField()
     invested_time = models.IntegerField()
     completion = models.BooleanField()
-    assignee = models.ManyToManyField(User)
-    state = models.CharField(max_length=8, choices=ISSUE_STATUS, default='TO_DO')
+    assignee = models.ManyToManyField(User, blank=True)
+    state = models.CharField(max_length=8, choices=ISSUE_STATUS, default='OPEN')
 
     def __str__(self):
         return self.name
