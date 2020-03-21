@@ -3,16 +3,53 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
-  <div class="container">
-    <div>
-       <h1>  Hello {{ user.username }}! </h1>
-      <p> This is the home page of UXHUB application</p>
-
-    </div>
-  </div>
-{% else %}
-  <p>You are not logged in</p>
-
-{% endif %}
+    {% if user.is_authenticated %}
+        <div class="jumbotron jumbotron-fluid text-center mt-3" style="padding-top: 20px">
+            <h5> Hello {{ user.username }}! </h5>
+            <span> Welcome to Uxhub</span>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <div>
+                        <span class="font-weight-bold">Projects</span>
+                    </div>
+                    <div>
+                        <a href="/projects">View all</a>
+                    </div>
+                    <div>
+                        <a href="/projects/new">Create new project</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div>
+                        <span class="font-weight-bold">Milestones</span>
+                    </div>
+                    <div>
+                        <a href="/milestones">View all</a>
+                    </div>
+                    <div>
+                        <a href="/milestones/new">Create new milestone</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div>
+                        <span class="font-weight-bold">Issues</span>
+                    </div>
+                    <div>
+                        <a href="/issues">View all</a>
+                    </div>
+                    <div>
+                        <a href="/issues/new">Create new issue</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center mt-3">
+            <span>You must be logged in. Login <a href="/accounts/login">here</a> </span>
+            <hr class="my-3">
+            <span>If you don't have account, please <a class="btn btn-sm btn-primary"
+                                                       href="/accounts/signup">sign up</a></span>
+        </div>
+    {% endif %}
 {% endblock %}
