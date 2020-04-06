@@ -11,3 +11,6 @@ class CommentForm(forms.ModelForm):
             'description': forms.Textarea({"rows": 5, "cols": 20})
         }
 
+
+# class CommentTestingForm(forms.Forms):
+#     description = forms.CharField(max_length=400)
