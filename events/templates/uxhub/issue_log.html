@@ -1,0 +1,83 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'events/style.css' %}">
+
+    <div class="content text_align">
+        <h3>Name: {{ object.name }}</h3>
+        <h3>Description: {{ object.description }}</h3>
+        <h3>Start date: {{ object.start_date }}</h3>
+        <h3>End date: {{ object.end_date }}</h3>
+        <h3>Milestone: {{ object.milestones }}</h3>
+        <h3>Approximated time: {{ object.approximated_time }}</h3>
+        <h3>Invested time: {{ object.invested_time }}</h3>
+        <h3>Completion: {{ object.completion }}</h3>
+        <h3>Assignee: {% for a in object.assignee.all %}
+                        {{ a.username }}
+                      {% endfor %}  </h3>
+        <h3>Project: {{ object.project }} (<a
+            href="{{ object.project.git_repository_url }}"> {{ object.project.git_repository_url }}</a>)</h3>
+        <p><button><a href="{% url "issue_view" object.id %}">Back</button></p>
+        <p><button><a href="{% url "events:comment_list_for_issue" object.pk %}">View comments</a></button></p>
+        <p><button><a href="{% url 'events:comment_new' %}">New comment</a></button></p>
+    </div>
+
+    <div class="timeline">
+        <h2 class="content text_align">Issue logs</h2>
+        {% for issue_event in log_issue_events %}
+        <div class="{% cycle 'container left' 'container right' %}">
+            <div class="content">
+            <h2>{{ issue_event.time | date:"d.M.Y. H:i:s" }},
+                {% if issue_event.users %}
+                    user : {{issue_event.users.username}}
+                {% else %}
+                    UNKNOWN_USER
+                {% endif %}
+            </h2>
+            <table>
+                <tr>
+                    <th>New state:</th><td>{{ issue_event.new_state }}</td>
+                </tr>
+                <tr>
+                    <th>Assignees:</th><td></td>
+                </tr>
+            </table>
+                <table border="1">
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                </tr>
+                <tr {% for assignee in issue_event.assignees.all %}>
+                    <td>{{ assignee.username }} </td>
+                    <td>{{ assignee.email }} </td>
+                    {% endfor %}
+                </tr>
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="timeline">
+        <h2 class="content text_align">Issue comments logs</h2>
+        {% for comment_event in log_comment_events %}
+        <div class="{% cycle 'container left' 'container right' %}">
+            <div class="content">
+            <h2>{{ comment_event.time | date:"d.M.Y. H:i:s" }},
+                {% if comment_event.author %}
+                    user: {{comment_event.author.username}}
+                {% else %}
+                    UNKNOWN_USER
+                {% endif %}
+            </h2>
+            <table>
+                <tr>
+                    <th>Comment id:</th><td>{{ comment_event.comment.pk }}</td>
+                </tr>
+                <tr>
+                    <th>Comment:</th><td>{{ comment_event.description }}</td>
+                </tr>
+            </table>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+

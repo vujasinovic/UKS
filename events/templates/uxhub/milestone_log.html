@@ -1,0 +1,44 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'events/style.css' %}">
+
+    <div class="content text_align">
+        <h2>Milestone Details</h2>
+        <h3>Name: {{ object.name }}</h3>
+        <h3>Project: {{ object.projects.name }} (<a
+            href="{{ object.projects.git_repository_url }}"> {{ object.projects.git_repository_url }}</a>)</h3>
+        <h3>Start date: {{ object.start_date  }}</h3>
+        <h3>End date: {{ object.end_date }}</h3>
+        <p><button><a href="{% url "milestone_view" object.pk %}">Back</a></button></p>
+    </div>
+
+    <div class="timeline">
+        {% for event in log_events %}
+        <div class="{% cycle 'container left' 'container right' %}">
+            <div class="content">
+            <h2>{{ event.time | date:"d.M.Y. H:i:s" }},
+                {% if event.author %}
+                    user : {{event.author.username}}
+                {% else %}
+                    UNKNOWN_USER
+                {% endif %}
+                {{event.author.username}}
+            </h2>
+            <table>
+                <tr>
+                    <th>Name:</th><td>{{ event.name }}</td>
+                </tr>
+                <tr>
+                    <th>Project:</th><td>{{ event.projects.name }}</td>
+                </tr>
+                <tr>
+                    <th>Start date:</th><td>{{ event.start_date }}</td>
+                </tr>
+                <tr>
+                    <th>End date:</th><td>{{ event.end_date }}</td>
+                </tr>
+            </table>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+

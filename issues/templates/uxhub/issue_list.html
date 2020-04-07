@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Issues{% endblock %}
+
+{% block content %}
+    <table class="table table-sm table-hover table-bordered text-center mt-3">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Project</th>
+            <th scope="col">Milestone</th>
+            <th scope="col">Approximated</th>
+            <th scope="col">Start</th>
+            <th scope="col">End</th>
+            <th scope="col">Completion</th>
+            <th scope="col">Assignee</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for issue in object_list %}
+            <tr>
+                <td>{{ issue.name }}</td>
+                <td><a href="{% url "project_view" issue.project.id %}">{{ issue.project }}</a></td>
+                <td><a href="{% url "milestone_view" issue.milestones.id %}">{{ issue.milestones }}</a></td>
+                <td>{{ issue.approximated_time }}</td>
+                <td>{{ issue.start_date }}</td>
+                <td>{{ issue.end_date }}</td>
+                <td>{{ issue.completion }}</td>
+                <td>
+                    {% for a in issue.assignee.all %}
+                        {{ a.username }}
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{% url "issue_view" issue.id %}" class="btn btn-sm btn-primary">view</a>
+                    <a href="{% url "issue_edit" issue.id %}" class="btn btn-sm btn-primary">edit</a>
+                    <a href="{% url "issue_delete" issue.id %}" class="btn btn-sm btn-danger">delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url "issue_new" %}" class="btn btn-outline-primary btn-sm float-right"> + New issue</a>
+
+{% endblock %}

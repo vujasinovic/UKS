@@ -1,0 +1,12 @@
+
+*.log
+*.pot
+*.pyc
+
+.idea/
+
+*.sqlite3
+db.sqllite3
+
+venv
+/uxhub/migrations/

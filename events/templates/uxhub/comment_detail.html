@@ -1,0 +1,7 @@
+<h2>Comment details</h2>
+<h3>Issues: {{ object.issues }}</h3>
+<h3>Desc: {{ object.description }}</h3>
+<h3>Time: {{ object.time }}</h3>
+<h3>User: {{ object.author }}</h3>
+<button><a href="{% url "events:comment_update" object.id %}">Update</a></button>
+<button><a href="{% url 'events:comment_list_for_issue' object.issues.pk %}"> Back</a></button>

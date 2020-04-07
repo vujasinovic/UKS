@@ -1,0 +1,30 @@
+
+<table border="1" style="border: solid">
+    <thead>
+    <tr>
+        <th>Issues</th>
+        <th>Users</th>
+        <th>Time</th>
+        <th>Comment</th>
+        <th>Detail</th>
+        <th>Update</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for comment in object_list %}
+        <tr>
+            <td>{{ comment.issues }}</td>
+            <td>{{ comment.author }}</td>
+            <td>{{ comment.time }}</td>
+            <td>{{ comment.description }}</td>
+            <td><a href="{% url "events:comment_detail" comment.id %}">View</a></td>
+            <td><a href="{% url "events:comment_update" comment.id %}">Update</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<hr>
+<button><a href="{% url 'events:comment_new'  %}"> New</a></button>
+
+
