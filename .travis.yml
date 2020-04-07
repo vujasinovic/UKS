@@ -1,24 +1,15 @@
 language: python
-#dist: using the default xenial
-#os, using the default linux
 
 python:
-#  - '3.5'
   - '3.6'
 
 services:
   - postgresql
 
-# env:
-#  - PSYCOPG=1.4.1
-#  - DJANGO=3.0.2
-
-
 before_install:
   - export DJANGO_SETTINGS_MODULE=uks.settings
 
 install:
-  #- pip install Django==$DJANGO
   - pip install -r requirements.txt
 
 before_script:
