@@ -15,14 +15,14 @@ services:
 
 
 before_install:
-  - export DJANGO_SETTINGS_MODULE=mysite.settings
+  - export DJANGO_SETTINGS_MODULE=uks.settings
 
 install:
   #- pip install Django==$DJANGO
   - pip install -r requirements.txt
 
 before_script:
-  - psql -c "CREATE DATABASE mydb;" -U postgres
+  - psql -c "CREATE DATABASE uks;" -U postgres
 
 script:
   - python manage.py check
