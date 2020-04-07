@@ -23,5 +23,10 @@ script:
   - python manage.py test milestones/tests
   - python manage.py test events/tests
   
+before_install:
+  - docker --version
+  - docker build -t lukajvnv/uxhub_django:latest .
+  - docker images
+  
 
 
