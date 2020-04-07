@@ -17,9 +17,11 @@ before_script:
 
 script:
   - python manage.py check
-#  - bash django_script.sh
   - python manage.py makemigrations
   - python manage.py migrate
-  - python manage.py test
+  - python manage.py test projects/tests
+  - python manage.py test milestones/tests
+  - python manage.py test events/tests
+  
 
 
