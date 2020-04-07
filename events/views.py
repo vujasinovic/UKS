@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
+from events import metrics
 from events.custom_form import CommentForm
 from uxhub.models import Comment, Milestone, ChangingMilestone, Issue, ChangingIssue, ChangingComment
 

@@ -25,5 +25,11 @@ urlpatterns = [
     path('projects/', include('projects.urls')),
     path('milestones/', include('milestones.urls')),
     path('issues/', include('issues.urls')),
-    path('events/', include('events.urls'))
+    path('events/', include('events.urls')),
+
+    # Creating the prometheus metrics endpoint, attach '/metrics' to the base url for testing
+    path(r'', include('django_prometheus.urls')),
+
+    # Creating the health check endpoint
+    path('health_check', include('health_check.urls')),
 ]
