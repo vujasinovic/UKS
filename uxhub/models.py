@@ -16,7 +16,7 @@ class User(models.Model):
         return self.username
 
 
-class Project(ExportModelOperationsMixin('project'), models.Model):
+class Project(models.Model):
     name = models.CharField(max_length=200)
     git_repository_url = models.URLField()
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
