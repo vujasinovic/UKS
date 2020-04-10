@@ -1,24 +1,15 @@
 language: python
-#dist: using the default xenial
-#os, using the default linux
 
 python:
-#  - '3.5'
   - '3.6'
 
 services:
   - postgresql
 
-# env:
-#  - PSYCOPG=1.4.1
-#  - DJANGO=3.0.2
-
-
 before_install:
   - export DJANGO_SETTINGS_MODULE=uks.settings
 
 install:
-  #- pip install Django==$DJANGO
   - pip install -r requirements.txt
 
 before_script:
@@ -26,9 +17,19 @@ before_script:
 
 script:
   - python manage.py check
-#  - bash django_script.sh
   - python manage.py makemigrations
   - python manage.py migrate
-  - python manage.py test
+  - python manage.py test projects/tests
+  - python manage.py test milestones/tests
+  - python manage.py test events/tests
+  
+before_install:
+  - docker --version
+  - docker build -t lukajvnv/uxhub_django:latest .
+  - docker images
+  
+after_success:
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+  - docker push $DOCKER_USERNAME/uxhub_django:latest
 
 
