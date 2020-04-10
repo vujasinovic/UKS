@@ -17,7 +17,7 @@ before_script:
 
 script:
   - python manage.py check
-  - python manage.py makemigrations
+  - python manage.py makemigrations uxhub
   - python manage.py migrate
   - python manage.py test projects/tests
   - python manage.py test milestones/tests

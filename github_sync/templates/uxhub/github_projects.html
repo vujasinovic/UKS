@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Github Projects{% endblock %}
+
+{% block content %}
+
+    {% if projects is not None %}
+        <table class="table table-sm table-hover table-bordered text-center mt-3">
+            <thead>
+            <tr>
+                <th scope="col">Project</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for project in projects %}
+                <tr>
+                <td>
+                    <a href="{{ project.html_url }}" target="_blank">
+                        {{ project.full_name }}
+                    </a>
+                </td>
+                <td>
+                    {% if project.uxhub_id is None %}
+                        <form method="POST" action="{% url 'github_project_import' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="name" value="{{ project.full_name }}"/>
+                            <button type="submit" class="btn btn-success">
+                                Import
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'project_view' project.uxhub_id %}">
+                            <button class="btn btn-primary">
+                                View
+                            </button>
+                        </a>
+                    {% endif %}
+                </td>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <a href="https://github.com/login/oauth/authorize?client_id={{ client_id }}&scope=repo">
+            <div class="row mt-5">
+                <button class="btn btn-success ml-auto mr-auto">
+                    Link Github Account
+                </button>
+            </div>
+        </a>
+    {% endif %}
+{% endblock %}

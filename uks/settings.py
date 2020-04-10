@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'milestones.apps.MilestonesConfig',
     'issues.apps.IssuesConfig',
     'events.apps.EventsConfig',
+    'commits.apps.CommitsConfig',
+    'github_sync.apps.GithubSyncConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
