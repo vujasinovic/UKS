@@ -26,8 +26,8 @@
         <div class="{% cycle 'container left' 'container right' %}">
             <div class="content">
             <h2>{{ issue_event.time | date:"d.M.Y. H:i:s" }},
-                {% if issue_event.users %}
-                    user : {{issue_event.users.username}}
+                {% if issue_event.author %}
+                    user : {{issue_event.author.username}}
                 {% else %}
                     UNKNOWN_USER
                 {% endif %}

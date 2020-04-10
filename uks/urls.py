@@ -25,6 +25,8 @@ urlpatterns = [
     path('projects/', include('projects.urls')),
     path('milestones/', include('milestones.urls')),
     path('issues/', include('issues.urls')),
+    path('commits/', include('commits.urls')),
+    path('github/', include('github_sync.urls')),
     path('events/', include('events.urls')),
 
     # Creating the prometheus metrics endpoint, attach '/metrics' to the base url for testing
