@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Commits{% endblock %}
+
+{% block content %}
+
+    <div style="width: 125%; margin-left: -12%;">
+        <form method="get" action="" class="mt-3">
+            <label>
+                Project:
+                <select class="form-control" name="project" onchange="this.form.submit()">
+                    <option selected></option>
+                    {% for project_name in project_names %}
+                        {% if project_name == selected_project %}
+                            <option selected value="{{ project_name }}">{{ project_name }}</option>
+                        {% else %}
+                            <option value="{{ project_name }}">{{ project_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </label>
+
+
+            <label class="ml-3">
+                Branch:
+                <select class="form-control" name="branch" onchange="this.form.submit()">
+                    <option selected></option>
+                    {% for branch_name in branch_names %}
+                        {% if branch_name == selected_branch %}
+                            <option selected value="{{ branch_name }}">{{ branch_name }}</option>
+                        {% else %}
+                            <option value="{{ branch_name }}">{{ branch_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </label>
+        </form>
+
+
+        <table class="table table-sm table-hover table-bordered text-center mt-3">
+            <thead>
+            <tr>
+                <th scope="col">Message</th>
+                <th scope="col">Author</th>
+                <th scope="col">SHA</th>
+                <th scope="col">Project</th>
+                <th scope="col">Branch</th>
+                <th scope="col">Issue</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for commit in commits %}
+                <tr>
+                    <td>{{ commit.comment }}</td>
+                    <td>
+                        <a href="https://github.com/{{ commit.author.githubuser.username }}" target="_blank">
+                            {{ commit.author.githubuser.username }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="https://github.com/{{ commit.projects.name }}/commit/{{ commit.sha }}" target="_blank">
+                            {{ commit.sha }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/projects/view/{{ commit.projects_id }}">
+                            {{ commit.projects }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="https://github.com/{{ commit.projects.name }}/tree/{{ commit.branch }}"
+                           target="_blank">
+                            {{ commit.branch }}
+                        </a>
+                    </td>
+                    <td>
+                        {% if commit.issues is not None %}
+                            <a href="/issues/view/{{ commit.issues_id }}">
+                                {{ commit.issues.name }}
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

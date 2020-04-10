@@ -11,6 +11,11 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+from github_sync.github_sync import setup_sync_scheduler
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'uks.settings')
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 application = get_wsgi_application()
+
+setup_sync_scheduler()

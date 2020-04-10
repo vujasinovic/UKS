@@ -10,7 +10,7 @@ from events.event_handling import create_comment_event, create_milestone_event, 
 class User(models.Model):
     username = models.CharField(max_length=50)
     email = models.EmailField()
-    auth_user = models.OneToOneField(AuthUser, on_delete=models.CASCADE)
+    auth_user = models.OneToOneField(AuthUser, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.username
@@ -26,10 +26,21 @@ class Project(models.Model):
         return self.name
 
 
+class GithubProjectSync(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    date_time_started = models.DateTimeField()
+
+
+class GithubEvent(models.Model):
+    project_sync = models.ForeignKey(GithubProjectSync, on_delete=models.CASCADE)
+    github_id = models.IntegerField()
+    type = models.CharField(max_length=256)
+
+
 class Milestone(models.Model):
     name = models.CharField(max_length=200, default='')
     projects = models.ForeignKey(Project, on_delete=models.CASCADE)
-    start_date = models.DateField()
+    start_date = models.DateField(null=True)
     end_date = models.DateField()
 
     def __str__(self):
@@ -50,21 +61,24 @@ class Issue(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=500)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    milestones = models.ForeignKey(Milestone, on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    approximated_time = models.IntegerField()
-    invested_time = models.IntegerField()
+    milestones = models.ForeignKey(Milestone, on_delete=models.CASCADE, null=True)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
+    approximated_time = models.IntegerField(null=True)
+    invested_time = models.IntegerField(null=True)
     completion = models.BooleanField()
     assignee = models.ManyToManyField(User, blank=True)
     state = models.CharField(max_length=8, choices=ISSUE_STATUS, default='OPEN')
+    github_id = models.IntegerField(null=True)
+    github_url = models.CharField(max_length=512, null=True)
 
     def __str__(self):
         return self.name
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None, skip_log=False):
         super().save(force_insert, force_update, using, update_fields)
-        create_issue_event(self.pk)
+        if not skip_log:
+            create_issue_event(self.pk)
 
 
 class Label(models.Model):
@@ -76,6 +90,7 @@ class Label(models.Model):
 class GithubUser(models.Model):
     users = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     username = models.CharField(max_length=30)
+    access_token = models.CharField(max_length=256, null=True)
 
 
 class Commit(models.Model):
@@ -84,7 +99,11 @@ class Commit(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     url = models.URLField
     comment = models.CharField(max_length=200)
-    invested_time = models.TimeField()
+    invested_time = models.TimeField(null=True)
+    github_id = models.IntegerField(null=True)
+    branch = models.CharField(max_length=255, null=True)
+    sha = models.CharField(max_length=256, null=True)
+    date = models.DateTimeField(null=True)
 
 
 class Event(models.Model):
@@ -99,6 +118,7 @@ class Event(models.Model):
 class ChangingIssue(Event):
     new_state = models.CharField(max_length=8, choices=ISSUE_STATUS, default='TO_DO')
     assignees = models.ManyToManyField(User, related_name='issue_assignees')
+    github_url = models.CharField(max_length=512, null=True)
 
 
 class Comment(Event):

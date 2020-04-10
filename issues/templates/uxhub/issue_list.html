@@ -12,8 +12,8 @@
             <th scope="col">Approximated</th>
             <th scope="col">Start</th>
             <th scope="col">End</th>
-            <th scope="col">Completion</th>
             <th scope="col">Assignee</th>
+            <th scope="col">State</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
@@ -22,15 +22,21 @@
             <tr>
                 <td>{{ issue.name }}</td>
                 <td><a href="{% url "project_view" issue.project.id %}">{{ issue.project }}</a></td>
-                <td><a href="{% url "milestone_view" issue.milestones.id %}">{{ issue.milestones }}</a></td>
+                <td>
+                    {% if issue.milestones is not None %}
+                        <a href="{% url "milestone_view" issue.milestones.id %}">{{ issue.milestones }}</a>
+                    {% endif %}
+                 </td>
                 <td>{{ issue.approximated_time }}</td>
                 <td>{{ issue.start_date }}</td>
                 <td>{{ issue.end_date }}</td>
-                <td>{{ issue.completion }}</td>
                 <td>
                     {% for a in issue.assignee.all %}
                         {{ a.username }}
                     {% endfor %}
+                </td>
+                <td>
+                    {{ issue.state }}
                 </td>
                 <td>
                     <a href="{% url "issue_view" issue.id %}" class="btn btn-sm btn-primary">view</a>
