@@ -1,8 +1,10 @@
 import requests
+from django.contrib.auth.models import User as AuthUser
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
-from github import Github
 from django.shortcuts import render
+from github import Github
 
 from github_sync.github_api import create_github_client
 from github_sync.github_sync import sync_project_async
@@ -29,7 +31,12 @@ def github_authorize(request):
     raw = response.text
     access_token = raw.split('access_token=')[1].split('&')[0]
 
-    user = User.objects.get(username=request.user.username)
+    try:
+        user = User.objects.get(username=request.user.username)
+    except:
+        auth_user = request.user
+        user = User(username=auth_user.username, auth_user=auth_user)
+        user.save()
 
     try:
         github_user = GithubUser.objects.get(users=user)
