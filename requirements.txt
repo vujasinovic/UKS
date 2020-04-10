@@ -5,7 +5,7 @@ pytz>=2019.3
 sqlparse>=0.3.1
 
 django-health-check>=3.12.1
-django-prometheus>=2.0.0
+django-prometheus==2.0.0
 gunicorn>=20.0.4
 django-redis>=4.11.0
 kombu>=4.6.8
