@@ -2,9 +2,6 @@ from django.contrib.auth.models import User as AuthUser
 from django.db import models
 # Create your models here.
 from django.utils.timezone import now
-from django_prometheus.models import ExportModelOperationsMixin
-
-from events.event_handling import create_comment_event, create_milestone_event, create_issue_event
 
 
 class User(models.Model):
@@ -46,10 +43,6 @@ class Milestone(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        super().save(force_insert, force_update, using, update_fields)
-        create_milestone_event(self.pk)
-
 
 ISSUE_STATUS = (
     ('OPEN', 'Open'),
@@ -74,11 +67,6 @@ class Issue(models.Model):
 
     def __str__(self):
         return self.name
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None, skip_log=False):
-        super().save(force_insert, force_update, using, update_fields)
-        if not skip_log:
-            create_issue_event(self.pk)
 
 
 class Label(models.Model):
@@ -123,10 +111,6 @@ class ChangingIssue(Event):
 
 class Comment(Event):
     description = models.CharField(max_length=400)
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        super().save(force_insert, force_update, using, update_fields)
-        create_comment_event(self.pk)
 
 
 class ChangingComment(Event):

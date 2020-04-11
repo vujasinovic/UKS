@@ -91,7 +91,7 @@ def handle_issue_event(event):
     elif action == "edited":
         issue.name = github_issue['title']
         issue.description = github_issue['body']
-    issue.save(skip_log=True)
+    issue.save()
 
     changing_issue = ChangingIssue(
         new_state=issue.state,
@@ -155,7 +155,7 @@ def create_issue(event):
         state='TO_DO',
         completion=False
     )
-    issue.save(skip_log=True)
+    issue.save()
 
     return issue
 
