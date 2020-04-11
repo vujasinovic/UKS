@@ -1,7 +1,48 @@
-<h2>Comment details</h2>
-<h3>Issues: {{ object.issues }}</h3>
-<h3>Desc: {{ object.description }}</h3>
-<h3>Time: {{ object.time }}</h3>
-<h3>User: {{ object.author }}</h3>
-<button><a href="{% url "events:comment_update" object.id %}">Update</a></button>
-<button><a href="{% url 'events:comment_list_for_issue' object.issues.pk %}"> Back</a></button>
+{% extends 'base.html' %}
+
+{% block title %}Comment{{ object.id }}{% endblock %}
+
+{% block content %}
+
+<div class="text-center mt-2">
+        <h5>Comment details</h5>
+        <div class="border">
+            <div>
+                <div class="m-2">
+                    <span>Id: <span class="font-weight-bold">{{ object.pk }}</span></span>
+                </div>
+                <hr class="my-2">
+                <div class="m-2">
+                    <span>Issues:
+                        <span class="font-weight-bold">{{ object.issues }}</span>
+
+                    </span>
+                </div>
+                <hr class="my-2">
+                <div class="m-2 ">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Desc:</span>
+                        </div>
+                        <textarea class="form-control text-center" aria-label="Desc" readonly>
+                            {{ object.description }}
+                        </textarea>
+                    </div>
+                </div>
+                <hr class="my-2">
+                <div class="m-2">
+                    <span>Time: <span class="font-weight-bold">{{ object.time }}</span></span>
+                </div>
+                <hr class="my-2">
+                <div class="m-2">
+                    <span>User: <span class="font-weight-bold">{{ object.author }}</span></span>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'events:comment_update' object.id %}?backToDetail=True" class="btn btn-sm btn-outline-primary mt-4">Update</a>
+        <a href="{% url 'events:comment_list_for_issue' object.issues.pk %}" class="btn btn-sm btn-outline-danger mt-4">
+            Back
+        </a>
+    </div>
+
+{% endblock %}

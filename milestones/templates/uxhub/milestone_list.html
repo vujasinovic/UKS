@@ -17,7 +17,7 @@
         {% for milestone in object_list %}
             <tr>
                 <td>{{ milestone.name }}</td>
-                <td>{{ milestone.projects.name }}</td>
+                <td><a href="{% url "project_view" milestone.projects.id %}">{{ milestone.projects.name }}</a></td>
                 <td>{{ milestone.start_date }}</td>
                 <td>{{ milestone.end_date }}</td>
                 <td>

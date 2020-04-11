@@ -41,8 +41,8 @@
                 <hr class="my-2">
                 <div class="m-2">
                     <span>Assignee: </span>
-                    <ul {% for assignee in object.assignee.all %}>
-                        <li> {{ assignee.username }}</li>
+                    {% for assignee in object.assignee.all %}
+                        <span class="badge badge-pill badge-success">{{ assignee.username }}</span>
                     {% endfor %}
                     </ul>
                 </div>
@@ -54,7 +54,6 @@
                     </a>
                     </span>
                 </div>
-                <hr class="my-2">
             </div>
         </div>
         <a href="{% url "issue_edit" issue.id %}" class="btn btn-sm btn-outline-primary mt-4">Edit</a>
