@@ -1,4 +1,6 @@
 from django.test import TestCase
+
+from events.event_handling import create_issue_event
 from events.tests.test_utils import create_project, create_user, create_milestone, create_auth_user, create_issue, \
     create_comment
 from uxhub.models import Comment, Issue, ChangingIssue
@@ -13,6 +15,7 @@ class TestModels(TestCase):
         self.issue = create_issue(self.project, self.milestone)
 
         self.issue_id = self.issue.id
+        create_issue_event(self.issue_id, self.auth_user)
 
     def test_adding_new_comment(self):
         first_comment = create_comment(self.issue, self.user, 'First comment')
@@ -44,18 +47,19 @@ class TestModels(TestCase):
         self.assertNotEqual(issue_state_before_update, issue_state_after_update)
 
     def test_issue_update_changing_event_created(self):
-        issue_before_update = Issue.objects.get(pk=self.issue_id)
+        issue = Issue.objects.get(pk=self.issue_id)
 
         # SET TO OPEN BY DEFAULT
-        issue_state_before_update = issue_before_update.state
+        issue_state_before_update = issue.state
         issue_events_before = ChangingIssue.objects.filter(issues__id=self.issue_id).order_by('-time')
         issue_events_before_latest = issue_events_before[0]
         issue_events_before_len = issue_events_before.count()
 
         # UPDATE
         issue_state_after_update = 'CLOSED'
-        issue_before_update.state = issue_state_after_update
-        issue_before_update.save()
+        issue.state = issue_state_after_update
+        issue.save()
+        create_issue_event(self.issue_id, self.auth_user)
 
         issue_events_after = ChangingIssue.objects.filter(issues__pk=self.issue_id).order_by('-time')
         issue_events_after_len = issue_events_after.count()

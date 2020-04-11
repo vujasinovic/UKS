@@ -20,11 +20,11 @@ class TestUrls(TestCase):
         self.assertEqual(resolve(url).func.view_class, CommentList)
 
     def test_comment_list_for_issue(self):
-        url = reverse(self.comment_list_by_issue_path_name, args=[self.issue_id])
+        url = reverse(self.comment_list_by_issue_path_name, kwargs={'issue_id': self.issue_id})
 
         self.assertEqual(resolve(url).view_name, self.comment_list_by_issue_path_name)
         self.assertEqual(resolve(url).func.view_class, CommentList)
 
     def test_comment_list_for_issue_invalid_args(self):
         with self.assertRaises(NoReverseMatch) as cm:
-            url = reverse(self.comment_list_by_issue_path_name, args=[self.invalid_issue_id])
+            url = reverse(self.comment_list_by_issue_path_name, kwargs={'issue_id': self.invalid_issue_id})
