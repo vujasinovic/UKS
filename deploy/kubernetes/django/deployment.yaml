@@ -17,7 +17,7 @@ spec:
       containers:
         - name: django
           imagePullPolicy: IfNotPresent
-          image: xxx/uxhub_django_minikube
+          image: lukajvnv/uxhub_django
           ports:
             - containerPort: 8000
           env:

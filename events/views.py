@@ -112,6 +112,7 @@ class MilestoneLogView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         milestone_id = self.kwargs['pk']
         context['log_events'] = ChangingMilestone.objects.filter(milestones__id=milestone_id).order_by('-time')
+        metrics.milestone_logs_invoked.inc()
         return context
 
 
@@ -124,4 +125,5 @@ class IssueLogView(LoginRequiredMixin, DetailView):
         issue_id = self.kwargs['pk']
         context['log_issue_events'] = ChangingIssue.objects.filter(issues__id=issue_id).order_by('-time')
         context['log_comment_events'] = ChangingComment.objects.filter(issues__id=issue_id).order_by('-time')
+        metrics.issue_logs_invoked.inc()
         return context

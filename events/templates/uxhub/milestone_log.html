@@ -24,6 +24,11 @@
                     UNKNOWN_USER
                 {% endif %}
             </h2>
+                {% if forloop.first %}
+                    <button class="btn btn-lg btn-success">
+                        <a href="{% url "milestone_edit" object.id %}">Update</a>
+                    </button>
+                {% endif %}
             <table>
                 <tr>
                     <th>Name:</th><td>{{ event.name }}</td>

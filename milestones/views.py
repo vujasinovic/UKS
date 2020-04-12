@@ -2,6 +2,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from events import metrics
 from events.event_handling import create_milestone_event
 from uxhub.models import Milestone
 
@@ -23,6 +24,7 @@ class MilestoneCreate(CreateView):
         response = super().form_valid(form)
         auth_user = self.request.user
         create_milestone_event(self.object.pk, auth_user)
+        metrics.milestone_created.inc()
         return response
 
 
@@ -35,6 +37,7 @@ class MilestoneUpdate(UpdateView):
         response = super().form_valid(form)
         auth_user = self.request.user
         create_milestone_event(self.object.pk, auth_user)
+        metrics.milestone_updated.inc()
         return response
 
 
