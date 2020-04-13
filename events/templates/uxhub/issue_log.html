@@ -1,3 +1,6 @@
+<head>
+    <title>Issue log for {{ object.name }}</title>
+</head>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'events/style.css' %}">
 
@@ -10,14 +13,17 @@
         <h3>Approximated time: {{ object.approximated_time }}</h3>
         <h3>Invested time: {{ object.invested_time }}</h3>
         <h3>Completion: {{ object.completion }}</h3>
-        <h3>Assignee: {% for a in object.assignee.all %}
-                        {{ a.username }}
-                      {% endfor %}  </h3>
+        <h3>Assignee:
+            {% for a in object.assignee.all %}
+                {{ a.username}}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </h3>
+        <h3>Status: {{ object.state }}</h3>
         <h3>Project: {{ object.project }} (<a
             href="{{ object.project.git_repository_url }}"> {{ object.project.git_repository_url }}</a>)</h3>
         <p><button><a href="{% url "issue_view" object.id %}">Back</button></p>
         <p><button><a href="{% url "events:comment_list_for_issue" object.pk %}">View comments</a></button></p>
-        <p><button><a href="{% url 'events:comment_new' %}">New comment</a></button></p>
+        <p><button><a href="{% url 'events:comment_new_log' object.pk %}">New comment</a></button></p>
     </div>
 
     <div class="timeline">
@@ -27,11 +33,17 @@
             <div class="content">
             <h2>{{ issue_event.time | date:"d.M.Y. H:i:s" }},
                 {% if issue_event.author %}
-                    user : {{issue_event.author.username}}
+                    author : {{issue_event.author.username}}
                 {% else %}
                     UNKNOWN_USER
                 {% endif %}
             </h2>
+                {% if forloop.first %}
+                    <button class="btn btn-lg btn-success">
+                        <a href="{% url "issue_edit" object.id %}">Update</a>
+                    </button>
+                {% endif %}
+
             <table>
                 <tr>
                     <th>New state:</th><td>{{ issue_event.new_state }}</td>
@@ -42,14 +54,23 @@
             </table>
                 <table border="1">
                 <tr>
+                    <th>No</th>
                     <th>Username</th>
                     <th>Email</th>
                 </tr>
-                <tr {% for assignee in issue_event.assignees.all %}>
+                {% for assignee in issue_event.assignees.all %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
                     <td>{{ assignee.username }} </td>
-                    <td>{{ assignee.email }} </td>
-                    {% endfor %}
+                    <td>
+                        {% if assignee.email %}
+                            {{assignee.email}}
+                        {% else %}
+                            {{assignee.username}}@gmail.com
+                        {% endif %}
+                    </td>
                 </tr>
+                {% endfor %}
                 </table>
             </div>
         </div>
@@ -63,11 +84,14 @@
             <div class="content">
             <h2>{{ comment_event.time | date:"d.M.Y. H:i:s" }},
                 {% if comment_event.author %}
-                    user: {{comment_event.author.username}}
+                    author: {{comment_event.author.username}}
                 {% else %}
                     UNKNOWN_USER
                 {% endif %}
             </h2>
+                <button class="btn btn-lg btn-success">
+                    <a href="{% url 'events:comment_update' comment_event.comment.pk %}?backToLogs=True">Update</a>
+                </button>
             <table>
                 <tr>
                     <th>Comment id:</th><td>{{ comment_event.comment.pk }}</td>

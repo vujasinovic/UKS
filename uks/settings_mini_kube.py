@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'milestones.apps.MilestonesConfig',
     'issues.apps.IssuesConfig',
     'events.apps.EventsConfig',
+    'commits.apps.CommitsConfig',
+    'github_sync.apps.GithubSyncConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -93,11 +95,11 @@ WSGI_APPLICATION = 'uks.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django_prometheus.db.backends.postgresql',
-        'NAME': 'kubernetes_django',
-        'USER': os.getenv('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
-        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'kubernetes_django'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST'),
         'PORT': os.getenv('POSTGRES_PORT', 5432)
 
     }

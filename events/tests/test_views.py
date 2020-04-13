@@ -3,6 +3,7 @@ from django.test import TestCase, Client
 # Create your tests here.
 from django.urls import reverse
 
+from events.event_handling import create_comment_event, create_issue_event
 from events.tests.test_utils import create_project, create_user, create_milestone, create_auth_user, create_issue, \
     create_comment
 
@@ -15,10 +16,10 @@ class TestView(TestCase):
         self.issue_id = 1
         self.non_existed_milestone_id = 5
 
-        self.milestone_log_url = reverse('events:milestone_log', args=[self.milestone_id])
-        self.issue_log_url = reverse('events:issue_log', args=[self.issue_id])
+        self.milestone_log_url = reverse('events:milestone_log', kwargs={'pk': self.milestone_id})
+        self.issue_log_url = reverse('events:issue_log', kwargs={'pk': self.issue_id})
         self.all_comments_url = reverse('events:comment_list')
-        self.comment_by_issue_url = reverse('events:comment_list_for_issue', args=[self.issue_id])
+        self.comment_by_issue_url = reverse('events:comment_list_for_issue', kwargs={'issue_id': self.issue_id})
         self.new_comment_url = reverse('events:comment_new')
 
         self.username = 'lukajvnv'
@@ -30,6 +31,7 @@ class TestView(TestCase):
         self.project = create_project(self.user)
         self.milestone = create_milestone(self.project)
         self.issue = create_issue(self.project, self.milestone)
+        create_issue_event(self.issue_id, self.auth_user)
 
         self.client.login(username=self.username, password=self.password)
 
@@ -40,7 +42,7 @@ class TestView(TestCase):
         self.assertTemplateUsed(response, 'uxhub/milestone_log.html')
 
     def test_non_existed_milestone_log_GET(self):
-        non_existed_milestone_log_url = reverse('events:milestone_log', args=[self.non_existed_milestone_id])
+        non_existed_milestone_log_url = reverse('events:milestone_log', kwargs={'pk': self.non_existed_milestone_id})
         response = self.client.get(non_existed_milestone_log_url)
 
         http_status_not_found = 404
@@ -82,16 +84,20 @@ class TestView(TestCase):
         self.assertEqual(response_after_create.status_code, 200)
 
     def test_issue_log_GET(self):
-        create_comment(self.issue, self.user, 'New comment')
+        comment = create_comment(self.issue, self.user, 'New comment')
+        create_comment_event(comment.pk)
 
         response = self.client.get(self.issue_log_url)
         response_context = response.context_data
         comment_events_objects = response_context['log_comment_events']
+        issue_events_objects = response_context['log_issue_events']
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'uxhub/issue_log.html')
 
         self.assertTrue('log_issue_events' in response_context)
         self.assertTrue('log_comment_events' in response_context)
-        self.assertTrue(comment_events_objects.count(), 1)
+        self.assertEqual(comment_events_objects.count(), 1)
+        self.assertEqual(issue_events_objects.count(), 1)
+
 

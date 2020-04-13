@@ -7,5 +7,16 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ['description', 'author', 'issues']
         widgets = {
-            'description': forms.Textarea({"rows": 5, "cols": 20})
+            'description': forms.Textarea({"rows": 5, "cols": 20}),
+            'author': forms.HiddenInput()
+        }
+
+
+class CommentFormTest(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['description', 'author', 'issues']
+        widgets = {
+            'description': forms.Textarea({"rows": 5, "cols": 20}),
+            'author': forms.HiddenInput()
         }

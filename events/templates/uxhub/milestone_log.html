@@ -1,6 +1,8 @@
+<head>
+    <title>Milestone log for {{ object.name }}</title>
+</head>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'events/style.css' %}">
-
     <div class="content text_align">
         <h2>Milestone Details</h2>
         <h3>Name: {{ object.name }}</h3>
@@ -8,7 +10,7 @@
             href="{{ object.projects.git_repository_url }}"> {{ object.projects.git_repository_url }}</a>)</h3>
         <h3>Start date: {{ object.start_date  }}</h3>
         <h3>End date: {{ object.end_date }}</h3>
-        <p><button><a href="{% url "milestone_view" object.pk %}">Back</a></button></p>
+        <p><button class="btn btn-lg btn-danger"><a  href="{% url "milestone_view" object.pk %}">Back</a></button></p>
     </div>
 
     <div class="timeline">
@@ -17,12 +19,16 @@
             <div class="content">
             <h2>{{ event.time | date:"d.M.Y. H:i:s" }},
                 {% if event.author %}
-                    user : {{event.author.username}}
+                    author : {{event.author.username}}
                 {% else %}
                     UNKNOWN_USER
                 {% endif %}
-                {{event.author.username}}
             </h2>
+                {% if forloop.first %}
+                    <button class="btn btn-lg btn-success">
+                        <a href="{% url "milestone_edit" object.id %}">Update</a>
+                    </button>
+                {% endif %}
             <table>
                 <tr>
                     <th>Name:</th><td>{{ event.name }}</td>

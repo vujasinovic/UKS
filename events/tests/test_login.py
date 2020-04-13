@@ -13,7 +13,7 @@ class TestLogin(TestCase):
     def setUp(self):
         self.client = Client()
         self.milestone_id = 1
-        self.milestone_log_url = reverse('events:milestone_log', args=[self.milestone_id])
+        self.milestone_log_url = reverse('events:milestone_log', kwargs={'pk': self.milestone_id})
 
         self.username = 'lukajvnv'
         self.password = 'Luka2903'
@@ -38,4 +38,4 @@ class TestLogin(TestCase):
         self.client.login(username=self.username, password=self.password)
         response = self.client.get(self.milestone_log_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed('events/milestone_log')
+        self.assertTemplateUsed(response, 'uxhub/milestone_log.html')

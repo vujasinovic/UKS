@@ -6,19 +6,19 @@ python:
 services:
   - postgresql
 
-before_install:
-  - export DJANGO_SETTINGS_MODULE=uks.settings
+env:
+  - MINI_KUBE_SETTINGS=uks.settings_mini_kube
 
 install:
   - pip install -r requirements.txt
 
 before_script:
-  - psql -c "CREATE DATABASE uks;" -U postgres
+  - psql -c "CREATE DATABASE kubernetes_django;" -U postgres
 
 script:
-  - python manage.py check
-  - python manage.py makemigrations uxhub
-  - python manage.py migrate
+  - python manage.py check --settings $MINI_KUBE_SETTINGS
+  - python manage.py makemigrations uxhub --settings $MINI_KUBE_SETTINGS
+  - python manage.py migrate --settings $MINI_KUBE_SETTINGS
   - python manage.py test projects/tests
   - python manage.py test milestones/tests
   - python manage.py test events/tests
