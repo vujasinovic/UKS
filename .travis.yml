@@ -22,6 +22,7 @@ script:
   - python manage.py test projects/tests
   - python manage.py test milestones/tests
   - python manage.py test events/tests
+  - python manage.py test issues/tests
   
 before_install:
   - docker --version
